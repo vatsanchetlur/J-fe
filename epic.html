@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generated Epic and User Stories</title>
+</head>
+<body>
+  <h1>Generated Epic and User Stories</h1>
+
+  <h2>Epic</h2>
+  <p><strong>Summary:</strong> <span id="epicSummary"></span></p>
+  <p><strong>Description:</strong> <span id="epicDescription"></span></p>
+
+  <h3>Stories</h3>
+  <ul id="storiesList"></ul>
+
+  <script>
+    function getUrlParameter(name) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(name);
+    }
+
+    const epicSummary = decodeURIComponent(getUrlParameter('epicSummary'));
+    const epicDescription = decodeURIComponent(getUrlParameter('epicDescription'));
+    const stories = JSON.parse(decodeURIComponent(getUrlParameter('stories')));
+
+    document.getElementById('epicSummary').textContent = epicSummary;
+    document.getElementById('epicDescription').textContent = epicDescription;
+
+    const storiesList = document.getElementById('storiesList');
+    stories.forEach(story => {
+      const li = document.createElement('li');
+      li.innerText = `Summary: ${story.summary}, Description: ${story.description}`;
+      storiesList.appendChild(li);
+    });
+
+    
+  </script>
+</body>
+</html>

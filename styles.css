@@ -1,0 +1,227 @@
+/* General Body Styling */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Main Content Styling */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: rgba(0, 0, 0, 0.7);
+    border-radius: 10px;
+    animation: fadeInUp 0.6s ease;
+}
+
+/* Header Styling */
+header {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    letter-spacing: 2px;
+}
+
+/* Paragraph Styling */
+p {
+    font-size: 1.2rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 600px;
+    margin-bottom: 2rem;
+}
+
+/* Fieldset Styling - Card Style */
+fieldset {
+    border: none;
+    border-radius: 12px;
+    padding: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+fieldset:hover {
+    transform: translateY(-2px);
+}
+
+/* Legend Styling */
+legend {
+    font-size: 1.1rem;
+    font-weight: 600;
+    padding: 0 0.5rem;
+    color: #00c6ff;
+    margin-bottom: 0.8rem;
+}
+
+/* Floating Labels */
+.floating-label {
+    position: relative;
+    margin: 1rem 0;
+}
+
+.floating-label input,
+.floating-label textarea {
+    padding: 1.2rem 0.8rem 0.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+
+.floating-label label {
+    position: absolute;
+    top: 1rem;
+    left: 0.8rem;
+    font-size: 1rem;
+    color: #aaa;
+    pointer-events: none;
+    transition: 0.2s ease all;
+}
+
+.floating-label input:focus + label,
+.floating-label input:not(:placeholder-shown) + label,
+.floating-label textarea:focus + label,
+.floating-label textarea:not(:placeholder-shown) + label {
+    top: 0.3rem;
+    left: 0.6rem;
+    font-size: 0.75rem;
+    color: #00c6ff;
+}
+
+/* Select Styling */
+select {
+    padding: 0.8rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    margin: 0.5rem 0;
+    width: 100%;
+    background-color: #333;
+    color: #fff;
+    font-family: inherit;
+    box-sizing: border-box;
+    height: 3.2rem;
+}
+
+/* Input Groups */
+.input-group {
+    width: 100%;
+}
+
+.input-group.spaced {
+    margin-top: 1.5rem;
+}
+
+/* Button Styling */
+button {
+    padding: 1rem 2rem;
+    border: none;
+    border-radius: 25px;
+    background: linear-gradient(135deg, #00c6ff, #0072ff);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s ease, box-shadow 0.3s;
+    width: auto;
+    display: inline-block;
+    box-shadow: 0 0 8px rgba(0, 198, 255, 0.4);
+}
+
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 12px rgba(0, 198, 255, 0.6);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Epic and Story Display Styling */
+#epicSummary, #epicDescription {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+#storiesList {
+    list-style-type: none;
+    padding: 0;
+}
+
+#storiesList li {
+    font-size: 1.2rem;
+    margin-bottom: 0.8rem;
+}
+
+#storiesList li::before {
+    content: "\2022 ";
+    color: #00c6ff;
+}
+
+/* Footer Styling */
+footer {
+    position: absolute;
+    bottom: 10px;
+    font-size: 0.8rem;
+    color: #ccc;
+}
+
+/* Headings */
+h2, h3 {
+    font-size: 2rem;
+    color: #00c6ff;
+    margin-bottom: 1rem;
+}
+
+h1 {
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #fff;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+}
+
+/* Spinner Styles */
+.spinner {
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #00c6ff;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+

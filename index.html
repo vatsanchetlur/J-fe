@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EZEPICS - Landing Page</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+    }
+    .layout-container {
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      gap: 30px;
+      width: 100px;
+      background-color: rgba(15, 32, 39, 0.9);
+    }
+    .sidebar img {
+      width: 80px;
+      cursor: pointer;
+    }
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      text-align: center;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow-y: scroll;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* IE 10+ */
+    }
+    form {
+      width: 100%;
+      max-width: 600px;
+    }
+    fieldset {
+      border: none;
+      padding: 10px 0;
+      margin: 10px 0;
+    }
+    .floating-label {
+      margin: 0 0 10px;
+    }
+    textarea#persona {
+      height: 120px;
+    }
+    button {
+      margin: 10px 5px;
+    }
+    #gptResponse {
+      margin-top: 10px;
+    }
+  .main-content::-webkit-scrollbar {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="layout-container">
+    <div class="sidebar" style="position: fixed; top: 0; left: 0; height: 100vh;">
+      <a href="EZEPICSDesignDoc.pdf" target="_blank">
+        <img src="EZ-EpicsLogo.webp" alt="EZ Epics Logo" />
+      </a>
+      <a href="https://www.lucidchart.com/" target="_blank">
+        <img src="lucid.png" alt="Lucidchart Logo" />
+      </a>
+      <a href="https://libertymutual.atlassian.net/jira/plans" target="_blank">
+        <img src="jira.png" alt="JIRA Logo" />
+      </a>
+    </div>
+    <div class="main-content" style="margin-left: 100px; max-height: 100vh; overflow-y: scroll; scrollbar-width: none; -ms-overflow-style: none;">
+      <header>EZ-EPICS</header>
+      <p>Your intelligent app for automatic generation of EPICS & User Stories.</p>
+
+      <form id="userForm">
+        <fieldset>
+          <legend>Persona Context</legend>
+          <div class="floating-label" style="margin-top: 0;">
+            <textarea id="persona" placeholder=" " required style="height: 120px; margin-top: 0;"></textarea>
+            <label for="persona">Your ask!!!</label>
+          </div>
+
+          <div class="input-group spaced" style="margin-top: -8px;">
+            <select id="edge" required>
+              <option value="" disabled selected>Prompt Library</option>
+            </select>
+          </div>
+        </fieldset>
+
+        <fieldset style="margin-top: 4px; padding-top: 4px;">
+          <legend>Enter JIRA Details</legend>
+          <div class="floating-label">
+            <input type="text" id="projectKey" placeholder=" " required value="EBBP" />
+            <label for="projectKey">Project Key</label>
+          </div>
+          <div class="floating-label">
+            <input type="text" id="jiraLabel" placeholder=" " required value="NONE" />
+            <label for="jiraLabel">Label for Epics / User Stories</label>
+          </div>
+          <div class="floating-label">
+            <input type="text" id="jiraUser" placeholder=" " required value="cn.srivatsan@libertymutual.com" />
+            <label for="jiraUser">Notification Email</label>
+          </div>
+        </fieldset>
+
+        <button type="submit">Submit</button>
+      </form>
+
+      <div id="gptResponse">
+        <div id="spinner" class="spinner" style="display:none;"></div>
+        <p id="resultMessage" style="display:none;"></p>
+        <button id="downloadJsonBtn" disabled>📥 Download JSON</button>
+        <button id="downloadPdfBtn" disabled>📄 Download PDF</button>
+        <button id="createInJiraBtn" disabled>🚀 Create in JIRA</button>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+  document.getElementById("userForm").addEventListener("submit", function (e) {
+    const spinner = document.getElementById("spinner");
+    if (spinner) {
+      spinner.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  });
+  </script>
+  <script src="index.js"></script>
+</body>
+</html>
