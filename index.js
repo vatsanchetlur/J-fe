@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById("createInJiraBtn").disabled = true;
 
   try {
-    const res = await fetch('https://v-be.onrender.com/api/prompts');
+    const res = await fetch('https://j-be-yxgx.onrender.com/api/prompts');
     const promptData = await res.json();
     const edgeSelect = document.getElementById('edge');
     promptData.prompts.forEach(prompt => {
@@ -69,7 +69,7 @@ Return the response as JSON in this format:
   const payload = { persona, edge, projectKey, jiraUser, jiraLabel, prompt };
 
   try {
-    const response = await fetch("https://v-be.onrender.com/api/generate-upload", {
+    const response = await fetch("https://j-be-yxgx.onrender.com/api/generate-upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -166,7 +166,7 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
   };
 
   try {
-    const response = await fetch("https://v-be.onrender.com/api/jira/create", {
+    const response = await fetch("https://j-be-yxgx.onrender.com/api/jira/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
