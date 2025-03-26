@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById("downloadJsonBtn").disabled = true;
   document.getElementById("downloadPdfBtn").disabled = true;
+  document.getElementById("createInJiraBtn").disabled = true;
 
   try {
     const res = await fetch('https://v-be.onrender.com/api/prompts');
@@ -27,14 +28,10 @@ document.getElementById("userForm").addEventListener("submit", async function (e
   spinner.style.display = "block";
   resultMessage.style.display = "none";
 
-  // 🧭 Scroll to spinner in main-content
   const container = document.querySelector(".main-content");
   if (spinner && container) {
     const offsetTop = spinner.offsetTop;
-    container.scrollTo({
-      top: offsetTop - 20,
-      behavior: "smooth"
-    });
+    container.scrollTo({ top: offsetTop - 20, behavior: "smooth" });
   }
 
   const persona = document.getElementById("persona").value;
@@ -70,7 +67,6 @@ Return the response as JSON in this format:
 `;
 
   const payload = { persona, edge, projectKey, jiraUser, jiraLabel, prompt };
-  console.log("Sending data to backend:", payload);
 
   try {
     const response = await fetch("https://v-be.onrender.com/api/generate-upload", {
@@ -84,9 +80,9 @@ Return the response as JSON in this format:
 
     if (response.ok && result.epic && result.stories) {
       latestJson = result;
-
       document.getElementById("downloadJsonBtn").disabled = false;
       document.getElementById("downloadPdfBtn").disabled = false;
+      document.getElementById("createInJiraBtn").disabled = false;
 
       resultMessage.innerText = "✅ Results are ready";
       resultMessage.style.display = "block";
@@ -152,4 +148,39 @@ document.getElementById("downloadPdfBtn").addEventListener("click", () => {
   });
 
   doc.save('epic-stories.pdf');
+});
+
+document.getElementById("createInJiraBtn").addEventListener("click", async () => {
+  if (!latestJson) return;
+
+  const projectKey = document.getElementById("projectKey").value;
+  const jiraLabel = document.getElementById("jiraLabel").value;
+  const jiraUser = document.getElementById("jiraUser").value;
+
+  const payload = {
+    epic: latestJson.epic,
+    stories: latestJson.stories,
+    projectKey,
+    jiraLabel,
+    jiraUser
+  };
+
+  try {
+    const response = await fetch("https://v-be.onrender.com/api/jira/create", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+
+    if (response.ok) {
+      alert(`✅ Created in JIRA! Epic Key: ${data.epicKey}`);
+    } else {
+      alert("❌ Error creating in JIRA: " + (data.error || "Unknown error"));
+    }
+  } catch (err) {
+    console.error("Error posting to JIRA:", err);
+    alert("Something went wrong when sending data to JIRA.");
+  }
 });
