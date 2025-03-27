@@ -184,3 +184,35 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
     alert("Something went wrong when sending data to JIRA.");
   }
 });
+const micBtn = document.getElementById("micBtn");
+const personaInput = document.getElementById("persona");
+
+if ('webkitSpeechRecognition' in window) {
+  const recognition = new webkitSpeechRecognition();
+  recognition.lang = 'en-US';
+  recognition.interimResults = false;
+  recognition.continuous = false;
+
+  micBtn.addEventListener("click", () => {
+    recognition.start();
+    micBtn.innerText = "🎙️ Listening...";
+  });
+
+  recognition.onresult = function (event) {
+    const transcript = event.results[0][0].transcript;
+    personaInput.value += (personaInput.value ? " " : "") + transcript;
+    micBtn.innerText = "🎤 Speak";
+  };
+
+  recognition.onerror = function (event) {
+    console.error("Speech recognition error:", event);
+    micBtn.innerText = "🎤 Speak";
+  };
+
+  recognition.onend = function () {
+    micBtn.innerText = "🎤 Speak";
+  };
+} else {
+  micBtn.disabled = true;
+  micBtn.innerText = "❌ Speech not supported";
+}
