@@ -16,6 +16,38 @@ document.addEventListener('DOMContentLoaded', async () => {
   } catch (err) {
     console.error('Failed to load prompt library:', err);
   }
+
+  // Speech recognition setup
+  const micBtn = document.getElementById('micBtn');
+  const personaTextarea = document.getElementById('persona');
+
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    micBtn.addEventListener('click', function () {
+      recognition.start();
+    });
+
+    recognition.onresult = function (event) {
+      const transcript = event.results[0][0].transcript;
+      personaTextarea.value = transcript;
+    };
+
+    recognition.onerror = function (event) {
+      console.error('Speech recognition error:', event.error);
+    };
+
+    recognition.onend = function () {
+      console.log('Speech recognition ended.');
+    };
+  } else {
+    console.warn('Speech recognition not supported in this browser.');
+    micBtn.disabled = true;
+  }
 });
 
 let latestJson = null;
