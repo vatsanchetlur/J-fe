@@ -216,21 +216,19 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
   };
 
   try {
-    const response = await fetch("https://j-be-yxgx.onrender.com/api/jira/create", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
+    const epicRes = await axios.post(`${JIRA_BASE_URL}/rest/api/3/issue`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
     });
+    const result = await epicRes.data;
 
-    const data = await response.json();
-
-    if (response.ok) {
-      alert(`✅ Created in JIRA! Epic Key: ${data.epicKey}`);
+    if (epicRes.status === 200 && result.epicKey) {
+        alert(`✅ Created in JIRA! Epic Key: ${result.epicKey}`);
     } else {
-      alert("❌ Error creating in JIRA: " + (data.error || "Unknown error"));
+        alert("❌ Error creating in JIRA: " + (result.error || "Unknown error"));
     }
-  } catch (err) {
+} catch (err) {
     console.error("Error posting to JIRA:", err);
     alert("Something went wrong when sending data to JIRA.");
-  }
-});
+}})
