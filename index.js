@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.getElementById("createInJiraBtn").disabled = true;
 
   try {
-    const res = await fetch('https://j-be-yxgx.onrender.com/api/prompts');
+    const res = await fetch('https://v-be.onrender.com/api/prompts');
     const promptData = await res.json();
     const edgeSelect = document.getElementById('edge');
     promptData.prompts.forEach(prompt => {
@@ -69,7 +69,7 @@ Return the response as JSON in this format:
   const payload = { persona, edge, projectKey, jiraUser, jiraLabel, prompt };
 
   try {
-    const response = await fetch("https://j-be-yxgx.onrender.com/api/generate-upload", {
+    const response = await fetch("https://v-be.onrender.com/api/generate-upload", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -111,35 +111,53 @@ document.getElementById("downloadPdfBtn").addEventListener("click", () => {
   if (!latestJson) return;
   const { epic, stories } = latestJson;
   const doc = new window.jspdf.jsPDF();
+  const pageWidth = 210;
+  const margin = 15;
+  const wrapWidth = pageWidth - margin * 2;
 
   doc.setFontSize(16);
-  doc.text("EZEPICS - Epic & Stories", 10, 15);
-  doc.setFontSize(12);
-  doc.text(`Epic Summary: ${epic.summary}`, 10, 30);
-  doc.text(`Epic Description: ${epic.description}`, 10, 40);
+  doc.text("EZEPICS - Epic & Stories", margin, 20);
 
-  let y = 55;
+  doc.setFontSize(12);
+  let y = 30;
+
+  const epicSummary = doc.splitTextToSize(`Epic Summary: ${epic.summary}`, wrapWidth);
+  const epicDescription = doc.splitTextToSize(`Epic Description: ${epic.description}`, wrapWidth);
+
+  doc.text(epicSummary, margin, y);
+  y += epicSummary.length * 7;
+  doc.text(epicDescription, margin, y);
+  y += epicDescription.length * 7 + 10;
+
   stories.forEach((story, i) => {
-    doc.text(`Story ${i + 1}: ${story.summary}`, 10, y);
-    y += 7;
-    doc.text(`Description: ${story.description}`, 10, y);
-    y += 7;
+    const summary = doc.splitTextToSize(`Story ${i + 1}: ${story.summary}`, wrapWidth);
+    const description = doc.splitTextToSize(`Description: ${story.description}`, wrapWidth);
+
+    doc.text(summary, margin, y);
+    y += summary.length * 7;
+    doc.text(description, margin, y);
+    y += description.length * 7;
+
     if (story.acceptanceCriteria?.length) {
-      doc.text("Acceptance Criteria:", 10, y);
+      doc.text("Acceptance Criteria:", margin, y);
       y += 6;
       story.acceptanceCriteria.forEach(c => {
-        doc.text(`• ${c}`, 14, y);
-        y += 6;
+        const crit = doc.splitTextToSize(`• ${c}`, wrapWidth - 4);
+        doc.text(crit, margin + 4, y);
+        y += crit.length * 6;
       });
     }
+
     if (story.tasks?.length) {
-      doc.text("Tasks:", 10, y);
+      doc.text("Tasks:", margin, y);
       y += 6;
       story.tasks.forEach(t => {
-        doc.text(`- ${t}`, 14, y);
-        y += 6;
+        const task = doc.splitTextToSize(`- ${t}`, wrapWidth - 4);
+        doc.text(task, margin + 4, y);
+        y += task.length * 6;
       });
     }
+
     y += 10;
     if (y > 270) {
       doc.addPage();
@@ -166,7 +184,7 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
   };
 
   try {
-    const response = await fetch("https://j-be-yxgx.onrender.com/api/jira/create", {
+    const response = await fetch("https://v-be.onrender.com/api/jira/create", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)
@@ -184,35 +202,3 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
     alert("Something went wrong when sending data to JIRA.");
   }
 });
-const micBtn = document.getElementById("micBtn");
-const personaInput = document.getElementById("persona");
-
-if ('webkitSpeechRecognition' in window) {
-  const recognition = new webkitSpeechRecognition();
-  recognition.lang = 'en-US';
-  recognition.interimResults = false;
-  recognition.continuous = false;
-
-  micBtn.addEventListener("click", () => {
-    recognition.start();
-    micBtn.innerText = "🎙️ Listening...";
-  });
-
-  recognition.onresult = function (event) {
-    const transcript = event.results[0][0].transcript;
-    personaInput.value += (personaInput.value ? " " : "") + transcript;
-    micBtn.innerText = "🎤 Speak";
-  };
-
-  recognition.onerror = function (event) {
-    console.error("Speech recognition error:", event);
-    micBtn.innerText = "🎤 Speak";
-  };
-
-  recognition.onend = function () {
-    micBtn.innerText = "🎤 Speak";
-  };
-} else {
-  micBtn.disabled = true;
-  micBtn.innerText = "❌ Speech not supported";
-}
