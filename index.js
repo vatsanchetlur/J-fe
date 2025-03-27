@@ -216,7 +216,7 @@ document.getElementById("createInJiraBtn").addEventListener("click", async () =>
   };
 
   try {
-    const epicRes = await axios.post(`${JIRA_BASE_URL}/rest/api/3/issue`, {
+    const epicRes = await axios.post(`https://libertymutual.atlassian.net/rest/api/3/issue`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload)
